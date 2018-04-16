@@ -97,5 +97,10 @@ public class RobotSuiveurLigne {
 		RobotConfig.MOTOR_RIGTH.setSpeed(200) ;
 		rotate360Degres() ;
 	}
+	
+	public void setSpeed (int speed) {
+		RobotConfig.MOTOR_LEFT.setSpeed(speed);
+		RobotConfig.MOTOR_RIGTH.setSpeed(speed);
+	}
 
 }
