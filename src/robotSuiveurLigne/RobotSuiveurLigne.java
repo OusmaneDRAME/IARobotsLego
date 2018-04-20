@@ -1,5 +1,6 @@
 package robotSuiveurLigne;
 
+<<<<<<< HEAD
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.robotics.navigation.DifferentialPilot;
@@ -13,11 +14,25 @@ public class RobotSuiveurLigne {
 	/*
 	 * Construct a new line following object
 	 */
+=======
+
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
+import lejos.nxt.Sound;
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.navigation.RotateMoveController;
+
+public class RobotSuiveurLigne {
+	private DifferentialPilot pilote = new DifferentialPilot(RobotConfig.WHEEL_DIAMETER, RobotConfig.TRACK_WIDTH, RobotConfig.MOTOR_LEFT, RobotConfig.MOTOR_RIGTH) ;
+	private int[] notes = {2349,115,0,5,1760,165,0,35} ;
+	
+>>>>>>> 0d85b64747bf392239e6330c7d446a3a64699b63
 	public RobotSuiveurLigne() {
 		RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.VITESSE_DEFAUT) ;
 		RobotConfig.MOTOR_RIGTH.setSpeed(RobotConfig.VITESSE_DEFAUT) ;
 		RobotConfig.MOTOR_HEAD.setSpeed(RobotConfig.VITESSE_TETE) ;
 		this.pilote.setRotateSpeed(RobotConfig.VITESSE_ROTATION) ;
+<<<<<<< HEAD
 //		this.pilote.setTravelSpeed(RobotConfig.VITESSE_DEFAUT) ;
 		RobotConfig.MOTOR_LEFT.setSpeed(400) ;
 		RobotConfig.MOTOR_RIGTH.setSpeed(400);
@@ -43,10 +58,32 @@ public class RobotSuiveurLigne {
 			if (RobotConfig.LIGHT_RIGTH.getLightValue() > RobotConfig.VALEUR_SEUIL) {
 				LCD.drawString("LUMIERE D", 3, 3) ;
 				pilote.setTravelSpeed(20) ;
+=======
+		this.pilote.setTravelSpeed(RobotConfig.VITESSE_DEFAUT) ;
+	}
+	
+	public void avancerEnSuivantLigne() {
+	
+		LCD.drawString("OK OK OK ", 0, 0) ;
+		LCD.drawString("Après Boucle ", 1, 1) ;
+		while(true) {
+			
+			if(RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.VALEUR_SEUIL){
+				LCD.drawString("IF LUMIERE GAUCHE BLANC", 2, 2) ;
+				pilote.setTravelSpeed(30) ;
+				while(RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.VALEUR_SEUIL) {
+					pilote.rotateLeft() ;pilote.forward() ; 
+				}
+							
+			} else if (RobotConfig.LIGHT_RIGTH.getLightValue() > RobotConfig.VALEUR_SEUIL) {
+				LCD.drawString("LUMIERE D", 3, 3) ;
+				pilote.setTravelSpeed(30) ;
+>>>>>>> 0d85b64747bf392239e6330c7d446a3a64699b63
 				while(RobotConfig.LIGHT_RIGTH.getLightValue() > RobotConfig.VALEUR_SEUIL) {
 					pilote.rotateRight() ; 
 					pilote.forward() ;
 				}
+<<<<<<< HEAD
 				RobotConfig.MOTOR_RIGTH.setSpeed(200/4) ;
 			} else if(RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.VALEUR_SEUIL){
 				LCD.drawString("IF LUMIERE GAUCHE BLANC", 2, 2) ;
@@ -123,6 +160,18 @@ public class RobotSuiveurLigne {
 		} catch (InterruptedException ie) {
 			
 		}
+=======
+				
+			} else if (RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.VALEUR_SEUIL && RobotConfig.LIGHT_RIGTH.getLightValue() > RobotConfig.VALEUR_SEUIL) {
+				if(RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.VALEUR_SEUIL && RobotConfig.LIGHT_RIGTH.getLightValue() > RobotConfig.VALEUR_SEUIL) {
+					Sound.pause(3000) ;
+				}
+			}
+			pilote.setTravelSpeed(RobotConfig.VITESSE_DEFAUT) ;
+			pilote.forward() ;
+		}
+		
+>>>>>>> 0d85b64747bf392239e6330c7d446a3a64699b63
 	}
 	
 	public void jouerSons() {
@@ -159,5 +208,25 @@ public class RobotSuiveurLigne {
 		LCD.drawInt(RobotConfig.MOTOR_RIGTH.getTachoCount(), 7, 1) ;
 	}
 
+<<<<<<< HEAD
+=======
+	public void rotate360DegresBis() {
+		RobotConfig.MOTOR_RIGTH.rotate(1440) ;
+		LCD.drawInt(RobotConfig.MOTOR_RIGTH.getTachoCount(), 4, 0, 1) ;
+		RobotConfig.MOTOR_RIGTH.rotateTo(0) ;
+		LCD.drawInt(RobotConfig.MOTOR_RIGTH.getTachoCount(), 4, 0, 2) ;
+	}
+	
+	public void utilisationDuTachymetre() {	
+		rotate360DegresBis();
+		RobotConfig.MOTOR_RIGTH.setSpeed(200) ;
+		rotate360Degres() ;
+	}
+	
+	public void setSpeed (int speed) {
+		RobotConfig.MOTOR_LEFT.setSpeed(speed);
+		RobotConfig.MOTOR_RIGTH.setSpeed(speed);
+	}
+>>>>>>> 0d85b64747bf392239e6330c7d446a3a64699b63
 
 }
