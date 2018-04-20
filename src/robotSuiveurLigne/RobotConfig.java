@@ -1,9 +1,6 @@
 package robotSuiveurLigne;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 0d85b64747bf392239e6330c7d446a3a64699b63
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
@@ -32,11 +29,7 @@ public class RobotConfig {
 	// Valeur par defaut de la vitesse des moteurs
 	public static final int VITESSE_ROTATION = 80;
 	public static final int VITESSE_TETE = 700;
-<<<<<<< HEAD
 	public static final int VITESSE_DEFAUT = 200;
-=======
-	public static final int VITESSE_DEFAUT = 140;
->>>>>>> 0d85b64747bf392239e6330c7d446a3a64699b63
 
 	// Valeur du seuil de detection des objets
 	public static final int SEUIL_DETECTION = 16;
@@ -44,9 +37,6 @@ public class RobotConfig {
 	
 	// Valeur seuil pour différencier le noir et le blanc
 	public static final int VALEUR_SEUIL = 50;
-<<<<<<< HEAD
 	
-=======
->>>>>>> 0d85b64747bf392239e6330c7d446a3a64699b63
 
 }
