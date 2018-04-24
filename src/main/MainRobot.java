@@ -9,12 +9,10 @@ public class MainRobot {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		RobotSuiveurLigne robotSuiveurLigne = new RobotSuiveurLigne() ;
-		robotSuiveurLigne.avancerEnSuivantLigne() ;
-		
-/*		robotSuiveurLigne.jouerSons() ;
-		robotSuiveurLigne.utilisationDuTachymetre() ;*/
 
+		RobotSuiveurLigne robotSuiveurLigne = new RobotSuiveurLigne() ;
+		robotSuiveurLigne.robotDrive(1) ;
+		
 
 	}
 

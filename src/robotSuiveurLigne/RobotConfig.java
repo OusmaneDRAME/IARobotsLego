@@ -29,7 +29,7 @@ public class RobotConfig {
 	// Valeur par defaut de la vitesse des moteurs
 	public static final int VITESSE_ROTATION = 80;
 	public static final int VITESSE_TETE = 700;
-	public static final int VITESSE_DEFAUT = 140;
+	public static final int VITESSE_DEFAUT = 200;
 
 	// Valeur du seuil de detection des objets
 	public static final int SEUIL_DETECTION = 16;
@@ -37,5 +37,6 @@ public class RobotConfig {
 	
 	// Valeur seuil pour différencier le noir et le blanc
 	public static final int VALEUR_SEUIL = 50;
+	
 
 }
