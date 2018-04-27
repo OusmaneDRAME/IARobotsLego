@@ -13,9 +13,7 @@ public class MainRobot {
 		RobotSuiveurLigne robotSuiveurLigne = new RobotSuiveurLigne() ;
 		Button.waitForAnyPress();
 		robotSuiveurLigne.parcourir();
-		//robotSuiveurLigne.avancerEnSuivantLigne() ;
-/*		robotSuiveurLigne.jouerSons() ;
-		robotSuiveurLigne.utilisationDuTachymetre() ;*/
+		//robotSuiveurLigne.testSensorLevel();
 		
 
 	}
