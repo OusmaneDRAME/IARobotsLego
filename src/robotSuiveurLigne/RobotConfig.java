@@ -30,6 +30,10 @@ public class RobotConfig {
 	public static final int VITESSE_ROTATION = 80;
 	public static final int VITESSE_TETE = 700;
 	public static final int VITESSE_DEFAUT = 200;
+	public static final int LOW_SPEED = 150;
+	public static final int MEDIUM_SPEED = 180;
+	public static final int HIGH_SPEED = 220;
+	public static final int VERY_HIGH_SPEED = 300;
 
 	// Valeur du seuil de detection des objets
 	public static final int SEUIL_DETECTION = 16;
@@ -47,11 +51,13 @@ public class RobotConfig {
 	
 	// Valeur pour calcul PID suivi de ligne
 	public static final int SP = 0;
-	public static final float KP = 60;
+	public static final float KP = 40;
 	public static final float KI = 0;
 	public static final float KD = 0;
 	public static final float I_HIGH = 100;
 	public static final float I_LOW = 0;
+	public static final float MV_HIGH = 150;
+	public static final float MV_LOW = -150;
 	
 	
 	// Valeur pour calcul PID 1 capteur

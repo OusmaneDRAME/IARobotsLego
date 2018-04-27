@@ -4,12 +4,10 @@ package robotSuiveurLigne;
 import java.util.LinkedList;
 import java.util.List;
 
-import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Sound;
 import lejos.robotics.navigation.DifferentialPilot;
-import lejos.robotics.navigation.RotateMoveController;
 import lejos.util.PIDController;
 
 
@@ -186,7 +184,9 @@ public class RobotSuiveurLigne {
 	public int getPIDInput () {
 		int leftLevel = sensorLevel(RobotConfig.LIGHT_LEFT,RobotConfig.LEFT_LOW_THRESHOLD,RobotConfig.LEFT_MID_THRESHOLD,RobotConfig.LEFT_HIGH_THRESHOLD);
 		int rightLevel = sensorLevel(RobotConfig.LIGHT_RIGHT,RobotConfig.RIGHT_LOW_THRESHOLD,RobotConfig.RIGHT_MID_THRESHOLD,RobotConfig.RIGHT_HIGH_THRESHOLD);
-		int index = leftLevel*4 + rightLevel;
+		int index = (leftLevel*4) + rightLevel;
+		LCD.clear(1);
+		LCD.drawInt(index, 0, 1);
 		int inputValue = 0;
 		switch (index) {
 		case 0 : //center
@@ -220,16 +220,22 @@ public class RobotSuiveurLigne {
 			inputValue = -1;
 		case 10 : //center
 			inputValue = 0;
+			break;
 		case 11 : //near near left
 			inputValue = 1;
+			break;
 		case 12 : //far far right
 			inputValue = -5;
+			break;
 		case 13 : //near right
 			inputValue = -2;
+			break;
 		case 14 : //near near right
 			inputValue = -1;
+			break;
 		case 15 : //center
 			inputValue = 99;
+			break;
 		}
 		return inputValue;
 	}
@@ -249,6 +255,8 @@ public class RobotSuiveurLigne {
 		pidControl.setPIDParam(PIDController.PID_KD, RobotConfig.KD);
 		pidControl.setPIDParam(PIDController.PID_I_LIMITLOW, RobotConfig.I_LOW);
 		pidControl.setPIDParam(PIDController.PID_I_LIMITHIGH, RobotConfig.I_HIGH);
+		pidControl.setPIDParam(PIDController.PID_LIMITHIGH, RobotConfig.MV_HIGH);
+		pidControl.setPIDParam(PIDController.PID_LIMITLOW, RobotConfig.MV_LOW);
 		while (continu) {
 			input = getPIDInput();
 			if (input == 99) {
@@ -258,9 +266,25 @@ public class RobotSuiveurLigne {
 			else {
 				int output = pidControl.doPID(input);
 				LCD.drawInt(output, 0, 0);
-				RobotConfig.MOTOR_LEFT.setSpeed(220 - output);
-				RobotConfig.MOTOR_RIGHT.setSpeed(220 + output);
-				this.forward();
+				if (input == 0) {
+					this.setSpeed(RobotConfig.VERY_HIGH_SPEED);
+					this.forward();
+				}
+				else if (input == 5 || input == -5) {
+					RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.LOW_SPEED - output);
+					RobotConfig.MOTOR_RIGHT.setSpeed(RobotConfig.LOW_SPEED + output);
+					this.forward();
+				}
+				else if (input == 4 || input == -4) {
+					RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.MEDIUM_SPEED - output);
+					RobotConfig.MOTOR_RIGHT.setSpeed(RobotConfig.MEDIUM_SPEED + output);
+					this.forward();
+				}
+				else {
+					RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.HIGH_SPEED - output);
+					RobotConfig.MOTOR_RIGHT.setSpeed(RobotConfig.HIGH_SPEED + output);
+					this.forward();
+				}
 			}
 		}
 	}
@@ -276,6 +300,20 @@ public class RobotSuiveurLigne {
 			int rightValue = RobotConfig.LIGHT_RIGHT.getLightValue();
 			LCD.drawInt(leftValue, 0, 0);
 			LCD.drawInt(rightValue, 0, 1);
+		}
+	}
+	
+	public void testSensorLevel () {
+		while (true) {
+			int leftLevel = this.sensorLevel(RobotConfig.LIGHT_LEFT, RobotConfig.LEFT_LOW_THRESHOLD, RobotConfig.LEFT_MID_THRESHOLD, RobotConfig.LEFT_HIGH_THRESHOLD);
+			int rightLevel = this.sensorLevel(RobotConfig.LIGHT_RIGHT, RobotConfig.RIGHT_LOW_THRESHOLD, RobotConfig.RIGHT_MID_THRESHOLD, RobotConfig.RIGHT_HIGH_THRESHOLD);
+			LCD.clear(0);
+			LCD.drawInt(leftLevel, 0, 0);
+			LCD.clear(1);
+			LCD.drawInt(rightLevel, 0, 1);
+			if (leftLevel == 3 && rightLevel ==3) {
+				LCD.drawString("OK", 0, 3);
+			}
 		}
 	}
 	
@@ -317,7 +355,7 @@ public class RobotSuiveurLigne {
 		start = System.currentTimeMillis();
 		stop = System.currentTimeMillis();
 		while (RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.LEFT_HIGH_THRESHOLD && RobotConfig.LIGHT_RIGHT.getLightValue() > RobotConfig.RIGHT_HIGH_THRESHOLD) {
-			this.setSpeed(140);
+			this.setSpeed(RobotConfig.LOW_SPEED);
 			this.forward();
 			stop = System.currentTimeMillis();
 		}
@@ -355,7 +393,7 @@ public class RobotSuiveurLigne {
 				LCD.drawString("Impasse", 0, 3);
 				this.stop();
 			}
-			this.setSpeed(RobotConfig.VITESSE_DEFAUT);
+			this.setSpeed(RobotConfig.HIGH_SPEED);
 		}
 	}
 	
@@ -386,8 +424,8 @@ public class RobotSuiveurLigne {
 				startCont = System.currentTimeMillis();
 			}
 			int output = pidControl1Sensor.doPID(input);
-			RobotConfig.MOTOR_LEFT.setSpeed(200 + output);
-			RobotConfig.MOTOR_RIGHT.setSpeed(200 - output);
+			RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.MEDIUM_SPEED + output);
+			RobotConfig.MOTOR_RIGHT.setSpeed(RobotConfig.MEDIUM_SPEED - output);
 			this.forward();
 			stop = System.currentTimeMillis();
 			LCD.drawInt((int) (stop-start), 0, 7);
@@ -422,8 +460,8 @@ public class RobotSuiveurLigne {
 				startCont = System.currentTimeMillis();
 			}
 			int output = pidControl1Sensor.doPID(input);
-			RobotConfig.MOTOR_RIGHT.setSpeed(200 + output);
-			RobotConfig.MOTOR_LEFT.setSpeed(200 - output);
+			RobotConfig.MOTOR_RIGHT.setSpeed(RobotConfig.MEDIUM_SPEED + output);
+			RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.MEDIUM_SPEED - output);
 			this.forward();
 			stop = System.currentTimeMillis();
 			LCD.drawInt((int) (stop-start), 0, 7);
@@ -460,8 +498,8 @@ public class RobotSuiveurLigne {
 				prev = 1;
 			}
 			int output = pidControl1Sensor.doPID(input);
-			RobotConfig.MOTOR_LEFT.setSpeed(180 - output);
-			RobotConfig.MOTOR_RIGHT.setSpeed(180 + output);
+			RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.MEDIUM_SPEED - output);
+			RobotConfig.MOTOR_RIGHT.setSpeed(RobotConfig.MEDIUM_SPEED + output);
 			this.forward();
 		}
 		pilote.stop();
@@ -484,8 +522,8 @@ public class RobotSuiveurLigne {
 				prev = 1;
 			}
 			int output = pidControl1Sensor.doPID(input);
-			RobotConfig.MOTOR_RIGHT.setSpeed(180 - output);
-			RobotConfig.MOTOR_LEFT.setSpeed(180 + output);
+			RobotConfig.MOTOR_RIGHT.setSpeed(RobotConfig.MEDIUM_SPEED - output);
+			RobotConfig.MOTOR_LEFT.setSpeed(RobotConfig.MEDIUM_SPEED + output);
 			this.forward();
 		}
 		pilote.stop();
