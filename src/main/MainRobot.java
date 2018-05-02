@@ -12,7 +12,8 @@ public class MainRobot {
 		// TODO Auto-generated method stub
 		RobotSuiveurLigne robotSuiveurLigne = new RobotSuiveurLigne() ;
 		Button.waitForAnyPress();
-		robotSuiveurLigne.parcourir();
+		robotSuiveurLigne.initParcours();
+		robotSuiveurLigne.parcourir(robotSuiveurLigne.getParcours());
 		//robotSuiveurLigne.testSensorLevel();
 		
 

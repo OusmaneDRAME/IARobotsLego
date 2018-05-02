@@ -9,6 +9,7 @@ import lejos.nxt.LightSensor;
 import lejos.nxt.Sound;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.util.PIDController;
+import utils.Direction;
 
 
 public class RobotSuiveurLigne {
@@ -17,20 +18,27 @@ public class RobotSuiveurLigne {
 	private PIDController pidControl = new PIDController(RobotConfig.SP,10);
 	private PIDController pidControl1Sensor = new PIDController(RobotConfig.SP1,10);
 	private List<Direction> parcours = new LinkedList<>();
+	
+	
 
 	
+	public List<Direction> getParcours() {
+		return parcours;
+	}
+
 	public void initParcours () {
 		parcours.add(Direction.GAUCHE);
 		parcours.add(Direction.DROITE);
 		parcours.add(Direction.GAUCHE);
 		parcours.add(Direction.DROITE);
+		
 	}
 	
-	public void parcourir () {
-		this.initParcours();
+	public void parcourir (List<Direction> parcours) {
 		while (parcours.size() > 0) {
-			this.followLinePID(false);
+			this.followLinePID(false,false);
 		}
+		this.followLinePID(false, true);
 	}
 	
 	/*
@@ -245,7 +253,7 @@ public class RobotSuiveurLigne {
 		RobotConfig.MOTOR_RIGHT.stop();;
 	}
 	
-	public void followLinePID (boolean ignore) {
+	public void followLinePID (boolean ignore, boolean stop) {
 		int input;
 		boolean continu = true;
 		LCD.clear(6);
@@ -261,7 +269,12 @@ public class RobotSuiveurLigne {
 			input = getPIDInput();
 			if (input == 99) {
 				continu = false;
-				this.detectIntersection(ignore);
+				if (!stop) {
+					this.detectIntersection(ignore);
+				}
+				else {
+					this.stop();
+				}
 			}
 			else {
 				int output = pidControl.doPID(input);
