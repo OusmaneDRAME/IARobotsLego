@@ -42,11 +42,11 @@ public class RobotConfig {
 	// Valeur seuil pour différencier le noir et le blanc
 	public static final int VALEUR_SEUIL = 50;
 	public static final int LEFT_LOW_THRESHOLD = 43;
-	public static final int LEFT_MID_THRESHOLD = 49;
-	public static final int LEFT_HIGH_THRESHOLD = 55;
+	public static final int LEFT_MID_THRESHOLD = 47;
+	public static final int LEFT_HIGH_THRESHOLD = 53;
 	public static final int RIGHT_LOW_THRESHOLD = 43;
-	public static final int RIGHT_MID_THRESHOLD = 49;
-	public static final int RIGHT_HIGH_THRESHOLD = 55;
+	public static final int RIGHT_MID_THRESHOLD = 47;
+	public static final int RIGHT_HIGH_THRESHOLD = 53;
 	
 	
 	// Valeur pour calcul PID suivi de ligne
