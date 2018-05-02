@@ -14,6 +14,8 @@ public class MainRobot {
 		Button.waitForAnyPress();
 		robotSuiveurLigne.initParcours();
 		robotSuiveurLigne.parcourir(robotSuiveurLigne.getParcours());
+		robotSuiveurLigne.initParcours();
+		robotSuiveurLigne.parcourir(robotSuiveurLigne.getParcours());
 		//robotSuiveurLigne.testSensorLevel();
 		
 

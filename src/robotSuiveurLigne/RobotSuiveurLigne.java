@@ -39,6 +39,16 @@ public class RobotSuiveurLigne {
 			this.followLinePID(false,false);
 		}
 		this.followLinePID(false, true);
+		long start;
+		long stop;
+		start = System.currentTimeMillis();
+		stop = System.currentTimeMillis();
+		pilote.setTravelSpeed(100);
+		while (stop - start <400) {
+			stop = System.currentTimeMillis();
+			pilote.backward();
+		}
+		
 	}
 	
 	/*
