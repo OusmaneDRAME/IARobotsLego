@@ -1,9 +1,11 @@
 package robotSuiveurLigne;
 
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import communication.BTReceive;
 import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Sound;
@@ -18,12 +20,34 @@ public class RobotSuiveurLigne {
 	private PIDController pidControl = new PIDController(RobotConfig.SP,10);
 	private PIDController pidControl1Sensor = new PIDController(RobotConfig.SP1,10);
 	private List<Direction> parcours = new LinkedList<>();
+	private BTReceive communicator = null;
+	private char command = '0';
 	
 	
 
 	
+	public void setParcours(List<Direction> parcours) {
+		this.parcours = parcours;
+	}
+
 	public List<Direction> getParcours() {
 		return parcours;
+	}
+
+	public BTReceive getCommunicator() {
+		return communicator;
+	}
+
+	public void setCommunicator(BTReceive communicator) {
+		this.communicator = communicator;
+	}
+
+	public char getCommand() {
+		return command;
+	}
+
+	public void setCommand(char command) {
+		this.command = command;
 	}
 
 	public void initParcours () {
@@ -34,12 +58,15 @@ public class RobotSuiveurLigne {
 		
 	}
 	
-	public void parcourir (List<Direction> parcours) {
-		while (parcours.size() > 0) {
+	public void parcourir () throws IOException {
+		while (parcours.size() <= 0) {
+			
+		}
+		while ((this.parcours.size() > 1 && this.parcours.get(0) != Direction.STOP) || (this.parcours.size() == 1 && this.parcours.get(0) != Direction.DEMITOUR && this.parcours.get(0) != Direction.STOP)) {
 			this.followLinePID(false,false);
 		}
 		this.followLinePID(false, true);
-		long start;
+		/*long start;
 		long stop;
 		start = System.currentTimeMillis();
 		stop = System.currentTimeMillis();
@@ -47,7 +74,24 @@ public class RobotSuiveurLigne {
 		while (stop - start <400) {
 			stop = System.currentTimeMillis();
 			pilote.backward();
+		}*/   //modifié
+		pilote.stop();
+	}
+	
+	public void parcourir (List<Direction> parcours) throws IOException {
+		while (parcours.size() > 0) {
+			this.followLinePID(false,false);
 		}
+		this.followLinePID(false, true);
+		/*long start;
+		long stop;
+		start = System.currentTimeMillis();
+		stop = System.currentTimeMillis();
+		pilote.setTravelSpeed(100);
+		while (stop - start <400) {
+			stop = System.currentTimeMillis();
+			pilote.backward();
+		}*/
 		
 	}
 	
@@ -263,7 +307,14 @@ public class RobotSuiveurLigne {
 		RobotConfig.MOTOR_RIGHT.stop();;
 	}
 	
-	public void followLinePID (boolean ignore, boolean stop) {
+	public void rotate180 () {
+		pilote.rotate(165);
+		while (RobotConfig.LIGHT_RIGHT.getLightValue() <= RobotConfig.RIGHT_LOW_THRESHOLD) {
+			pilote.rotate(5);
+		}
+	}
+	
+	public void followLinePID (boolean ignore, boolean stop) throws IOException {
 		int input;
 		boolean continu = true;
 		LCD.clear(6);
@@ -276,6 +327,11 @@ public class RobotSuiveurLigne {
 		pidControl.setPIDParam(PIDController.PID_LIMITHIGH, RobotConfig.MV_HIGH);
 		pidControl.setPIDParam(PIDController.PID_LIMITLOW, RobotConfig.MV_LOW);
 		while (continu) {
+			if (this.parcours.size() > 0 && this.parcours.get(0) == Direction.DEMITOUR) {
+				parcours.remove(0);
+				this.rotate180();
+				this.command = 'e';
+			}
 			input = getPIDInput();
 			if (input == 99) {
 				continu = false;
@@ -315,6 +371,40 @@ public class RobotSuiveurLigne {
 	public void forward () {
 		RobotConfig.MOTOR_LEFT.forward();
 		RobotConfig.MOTOR_RIGHT.forward();
+	}
+	
+	public void forward (long time) {
+		long start;
+		long stop;
+		start = System.currentTimeMillis();
+		stop = System.currentTimeMillis();
+		pilote.setTravelSpeed(150);
+		while (stop - start < time) {
+			stop = System.currentTimeMillis();
+			pilote.forward();
+		}
+		pilote.stop();
+	}
+	
+	public void backward (long time) {
+		long start;
+		long stop;
+		start = System.currentTimeMillis();
+		stop = System.currentTimeMillis();
+		pilote.setTravelSpeed(150);
+		while (stop - start < time) {
+			stop = System.currentTimeMillis();
+			pilote.backward();
+		}
+		pilote.stop();
+	}
+	
+	public void rotateLeft90 () {
+		pilote.rotate(90);
+	}
+	
+	public void rotateRight90 () {
+		pilote.rotate(-90);
 	}
 	
 	public void testSensor () {
@@ -377,11 +467,11 @@ public class RobotSuiveurLigne {
 		long stop;
 		start = System.currentTimeMillis();
 		stop = System.currentTimeMillis();
-		while (RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.LEFT_HIGH_THRESHOLD && RobotConfig.LIGHT_RIGHT.getLightValue() > RobotConfig.RIGHT_HIGH_THRESHOLD) {
+		/*while (RobotConfig.LIGHT_LEFT.getLightValue() > RobotConfig.LEFT_HIGH_THRESHOLD && RobotConfig.LIGHT_RIGHT.getLightValue() > RobotConfig.RIGHT_HIGH_THRESHOLD) {
 			this.setSpeed(RobotConfig.LOW_SPEED);
 			this.forward();
 			stop = System.currentTimeMillis();
-		}
+		}*/   //modifié
 		//this.stop();
 		/*if (stop - start >= 3000) {
 			state = 2;

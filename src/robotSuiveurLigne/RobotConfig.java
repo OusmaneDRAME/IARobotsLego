@@ -10,7 +10,7 @@ import lejos.nxt.UltrasonicSensor;
 public class RobotConfig {
 	// Configuration du diamètre et de la distance entre les deux roues
 	public static final int WHEEL_DIAMETER = 56 ;
-	public static final int TRACK_WIDTH = 120 ;
+	public static final int TRACK_WIDTH = 115 ;
 	
 	// Configuration moteur Robot
 	public static final NXTRegulatedMotor MOTOR_LEFT = Motor.C;
@@ -62,7 +62,7 @@ public class RobotConfig {
 	
 	// Valeur pour calcul PID 1 capteur
 	public static final int SP1 = 45;
-	public static final int KP1 = 8;
+	public static final int KP1 = 12;
 	public static final int KI1 = 0;
 	public static final int KD1 = 0;
 	
